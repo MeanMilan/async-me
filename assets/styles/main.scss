@@ -1,0 +1,333 @@
+@import '../../bower_components/normalize-scss/normalize';
+@import 'custom';
+
+//variables
+$slideWidth: 1024px;
+$slideHeight: 640px;
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  width: 100%;
+  tr {
+    th, td {
+      padding: 10px;
+    }
+  }
+}
+
+#deck {
+  position: relative;
+}
+
+.container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 50%;
+  left: -50%;
+  //overflow: hidden;
+  height: $slideHeight;
+  width: $slideWidth;
+  padding: 30px;
+  transition: all .6s ease;
+  &.preview {
+    left: 100%;
+    top: 40px;
+  }
+  &.current {
+    left: 50%;
+    &.preview {
+      left: 40px;
+      top: 40px;
+      note {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 100%;
+        padding-top: 20px;
+        color: #ccc;
+        font-size: 140%;
+      }
+    }
+  }
+  &.next {
+    &.preview {
+      left: 50%;
+      top: 40px;
+    }
+  }
+  note {
+    display: none;
+  }
+}
+
+#go-to {
+  z-index: 90;
+  width: 160px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  margin-left: -80px;
+  padding: 10px;
+  text-align: center;
+  border: 2px solid lighten(rgba(#000, .6), 40);
+  border-radius: 0 0 6px 6px;
+  color: #fff;
+  font-weight: bold;
+  background-color: rgba(#000, .6);
+  &.ng-hide {
+    top: -100px;
+  }
+  &.ng-hide-remove, &.ng-hide-add {
+    transition: all .4s ease;
+    display: block !important;
+  }
+  input {
+    width: 58px;
+    margin-left: 4px;
+    padding: 4px;
+    text-align: center;
+    color: #333;
+    border: none;
+  }
+}
+
+#progress-bar {
+  z-index: 90;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 8px;
+  transition: width .5s ease;
+}
+
+#slide-count {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  margin: 0;
+  padding: 5px 10px;
+  letter-spacing: .2em;
+}
+
+.abs-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+.flip {
+  display: block;
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  .clock {
+    font-size: 0;
+    font-family: Arial, Verdana, sans-serif;
+    font-weight: bold;
+    * {
+      font-size: 70px;
+    }
+    > span {
+      position: relative;
+      display: inline-block;
+      margin-right: 10px;
+      padding: 5px 15px;
+      border-radius: 4px;
+      color: #fff;
+      box-shadow: 1px 1px 1px #555;
+      background-color: #333;
+      background: -webkit-linear-gradient(top, #333 0%, #444 50%, #333 51%, #222 100%);
+      background: linear-gradient(to bottom, #333 0%, #444 50%, #333 51%, #222 100%);
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 3px;
+        background-color: #111;
+      }
+    }
+    > b {
+      color: #666;
+      margin-right: 10px;
+    }
+  }
+  .commands {
+    text-align: center;
+    .btn {
+      margin: 20px 10px 10px 10px;
+      padding: 5px 10px;
+      border: 1px solid #000;
+      border-radius: 2px;
+      cursor: pointer;
+      color: #dedede;
+      background-color: #333;
+    }
+  }
+}
+
+// too bad chrome is bugged
+
+@media print {
+  @page {
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    position: static;
+  }
+  .slide {
+    position: static !important;
+    transform: translate(0, 8%) !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: auto !important;
+    page-break-after: always;
+  }
+
+  #slide-count,
+  .ph {
+    display: none !important;
+  }
+}
+
+/* http://prismjs.com/download.html?themes=prism-okaidia&languages=markup+css+css-extras+clike+javascript+java+php+coffeescript+scss+bash+c+python+ruby+csharp+go+aspnet+scala+swift+objectivec+apacheconf+git */
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #f8f8f2;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  font-family: Consolas, Monaco, 'Andale Mono', monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  tab-size: 2;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 0;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: slategray;
+}
+
+.token.punctuation {
+  color: #f8f8f2;
+}
+
+.namespace {
+  opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+  color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value {
+  color: #e6db74;
+}
+
+.token.keyword {
+  color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+  color: #fd971f;
+}
+
+.token.important {
+  font-weight: bold;
+}
+
+.token.entity {
+  cursor: help;
+}
+

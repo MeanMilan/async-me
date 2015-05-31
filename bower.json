@@ -1,0 +1,45 @@
+{
+  "name": "applause",
+  "version": "0.2.1",
+  "devDependencies": {
+    "angular": "1.3.15",
+    "json3": "^3.3.0",
+    "normalize-scss": "~3.0.1",
+    "angular-animate": "1.3.15",
+    "showdown": "~0.3.1",
+    "angular-sanitize": "^1.3.0",
+    "ngstorage": "~0.3.0",
+    "moment": "~2.8.2"
+  },
+  "homepage": "https://github.com/Granze/applause",
+  "authors": [
+    "Maurizio Mangione <granzebru@gmail.com> (http://granze.net)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Granze/applause.git"
+  },
+  "description": "HTML presentations powered by Angular JS",
+  "main": "index.html",
+  "keywords": [
+    "slides",
+    "presentations",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "presentation",
+    ".editorconfig",
+    ".jshintrc"
+  ],
+  "overrides": {
+    "showdown": {
+      "main": "src/showdown.js"
+    }
+  },
+  "resolutions": {
+    "angular": "1.3.15"
+  }
+}

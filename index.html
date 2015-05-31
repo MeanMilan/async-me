@@ -1,0 +1,288 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Applause - HTML presentations powered by AngularJS</title>
+    <meta name="description" content="HTML presentations powered by Angular JS">
+    <meta name="viewport" content="width=device-width">
+    <!-- build:css assets/styles/applause.css -->
+    <link rel="stylesheet" href="assets/styles/main.css">
+    <!-- endbuild -->
+    <link rel="stylesheet" href="assets/theme/default.css">
+    <!-- Chrome print bug. Credits to @hakimel http://goo.gl/rGoUvj -->
+    <script>
+      if( window.location.search.match(/pdf/gi) ) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'assets/styles/pdf.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+    </script>
+  </head>
+  <body ng-app="applauseApp" ng-keyup="keyup($event)">
+
+    <div id="presentation" ng-controller="DeckCtrl" ng-cloak>
+
+      <goto class="ph"></goto>
+
+      <div class="container">
+
+        <!-- =========== SLIDE =========== -->
+
+        <slide>
+          <div class="abs-center">
+            <h1>Async & Me</h1>
+            <h3>My story with asynchronous programming</h3>
+            <img class="center" src="assets/theme/images/MM_logo.png"/>
+          </div>
+        </slide>
+
+        <slide>
+          <div class="abs-center">
+            <h2>Matteo Scandolo</h2>
+            <img class="round center" src="assets/images/teo.jpg" height="200" width="200">
+            <h3>Frontend Leader @LinkMe</h3>
+            <h3>Co-Founder @MeanMilan</h3>
+          </div>
+        </slide>
+
+        <slide>
+          <h2>Why Async Handling is so important in JS?</h2>
+          <img class="center" src="assets/theme/images/event-loop.jpg" height="250" alt="">
+          <code prism class="language-javascript">
+              while(queue.waitForMessage()){
+                  queue.processNextMessage();
+              }
+          </code>
+          <note>Event Loop!</note>
+        </slide>
+
+        <slide>
+            <div class="abs-center">
+                <h1>Disclaimer</h1>
+                <h3>This is not about a framework</h3>
+                <h3>This is not the truth, <br> it's my experience</h3>
+            </div>
+        </slide>
+
+        <slide steps="1">
+            <h1 class="abs-center">The Past</h1>
+            <div step="1">
+                <h2>Callbacks</h2>
+            </div>
+        </slide>
+
+        <slide>
+            <h1>What is a Callback? </h1>
+            <h4>
+                In JavaScript, functions are considered first-class citizens, <br> they are able to be passed as arguments or stored in variables or fields.
+            </h4>    
+            <h3>
+            Callbacks are functions that are passed as an argument to another function.
+            </h3>
+            <code prism class="language-javascript">
+                function runThisFunction(myCallbackFunction) {
+                    myCallbackFunction();
+                }
+
+                runThisFunction(function() {
+                    console.log('Kind of useless, but I see your point.');
+                }); 
+            </code>
+        </slide>
+        
+        <slide steps="2">
+            <h2>Why I do need a callback?</h2>
+            <div class="abs-center">
+                <div step="1">
+                    <h3>Allow the calling code to encapsulate some logic</h3>
+                </div>
+                <div step="2">
+                    <h3>Logic to be performed after an asynchronous operation</h3>
+                </div>
+            </div>
+        </slide>
+
+        <slide>
+            <h2>A common example</h2>
+            <code prism class="language-javascript">
+                $.ajax({
+                    url: '/api/',
+                    type: 'GET',
+                    success: function(data) {
+                        // Our callback function; this will be executed
+                        // after the async query is finished
+                    }
+                });
+            </code>
+       </slide>
+
+       <slide steps="1">
+           <h2>Pretty simple, but what's next?</h2>
+           <div step="1">
+               <code prism class="language-javascript">
+                    asyncFn1(function(){
+                        asyncFn2(function(){
+                            asyncFn3(function(){
+                                asyncFn4(function(){
+                                    asyncFn5(function(){
+                                        ...
+                                    })
+                                })
+                            })
+                        })
+                    })
+               </code>
+            </div>
+       </slide>
+
+        <slide bg-img="fire-orange-emergency-burning.jpg" credits="http://www.pexels.com/">
+            <h1 class="abs-center">Welcome to Callback Hell!</h1>
+        </slide>
+
+        <slide steps="4">
+            <h2>Ok, the term is cool but what are the problems?</h2>
+            <div step="1">
+                <h3>Unexpressive</h3>
+            </div>
+            <div step="2">
+                <h3>Unmaintanable</h3>
+            </div>
+            <div step="3">
+                <h3>Untestable</h3>
+            </div>
+            <div step="4">
+                <h2>Can we emprove this?</h2>
+            </div>
+        </slide>
+
+        <slide>
+            <h2>Named Functions</h2>
+            <code prism class="language-javascript">
+                function asyncFn3(res){
+                    //do async stuff
+                }
+
+                function asyncFn2(res){
+                    //do async stuff
+                    asyncFn3(data);
+                }
+
+                function asyncFn1(input){
+                    //do async stuff
+                    asyncFn2(res);
+                }
+
+                asyncFn1(initialData);
+            </code>
+        </slide>
+
+        <slide steps="3">
+            <h2>Better but...</h2>
+            <div step="1">
+                <h3>Function(s) are referenced with other function(s)</h3>
+            </div>
+            <div step="2">
+                <h3>Following the business logic is difficult</h3>
+            </div>
+            <div step="3">
+                <h3>Add/remove steps can have side effects</h3>
+            </div>
+        </slide>
+
+        <slide steps="8">
+            <h2>Anyway...</h2>
+            <div step="1">
+                <h3>Libraries can help!</h3>
+            </div>
+            <div step="2">
+                <h3><a href="https://github.com/caolan/async">async</a></h3>
+            </div>
+            <div class="col half">
+                <div step="3">
+                    <h3 class="small">.each(arr, iterator, cb)</h3>
+                </div>
+                <div step="5">
+                    <h3 class="small">.series(arr, cb)</h3>
+                </div>
+                <div step="7">
+                    <h3 class="small">.map(arr, iterator, cb)</h3>
+                </div>
+            </div>
+            <div class="col half">
+                <div step="4">
+                    <h3 class="small">.all(arr, iterator, cb)</h3>
+                </div>
+                <div step="6">
+                    <h3 class="small">.parallel(tasks, cb)</h3>
+                </div>
+                <div step="8">
+                    <h3 class="small">.reduce(arr, memo, iterator, cb)</h3>
+                </div>
+            </div>
+            <note>
+                .each -> array di parametri, applica una fn async
+                .all -> ritorna true se tutto arr passa il test async iterator
+            </note>
+        </slide>
+
+        <slide>
+            <h2 class="abs-center">
+                Can we do better?
+            </h2>
+        </slide>
+
+        <slide bg-img="promise-land.jpg"></slide>
+        <!-- TODO -->
+<!--    
+        Named Functions
+        Callback Libraries
+
+        Promise Theory
+        Promise Example with Q and Bluebird
+        ES6 Promise
+        Promise Chains
+        Promise Error Handling
+
+        Generators
+        Coroutine Bluebird
+        Examples Node / Tests -->
+
+      <!-- =========== /SLIDE =========== -->
+
+      </div>
+
+      <div id="slide-count" ng-show="{{isSlideCountVisible}}">{{$storage.currentSlide}}/{{lastSlide}}</div>
+
+      <progress-bar class="ph" ng-show="{{isProgressBarVisible}}"></progress-bar>
+
+    </div>
+
+    <!-- build:js assets/scripts/applause.js -->
+    <script src="assets/scripts/vendor/prism.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/showdown/src/showdown.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/ngstorage/ngStorage.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="assets/scripts/app.js"></script>
+    <script src="config.js"></script>
+    <script src="assets/scripts/controllers/deck.js"></script>
+    <script src="assets/scripts/directives/slide.js"></script>
+    <script src="assets/scripts/directives/fit.js"></script>
+    <script src="assets/scripts/directives/progressbar.js"></script>
+    <script src="assets/scripts/services/appdata.js"></script>
+    <script src="assets/scripts/directives/markdown.js"></script>
+    <script src="assets/scripts/directives/bg-img.js"></script>
+    <script src="assets/scripts/directives/goto.js"></script>
+    <script src="assets/scripts/directives/flip-clock.js"></script>
+    <script src="assets/scripts/directives/prism.js"></script>
+    <script src="assets/scripts/directives/note.js"></script>
+    <script src="assets/scripts/directives/step.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>
