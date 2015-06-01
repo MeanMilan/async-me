@@ -235,15 +235,158 @@
         </slide>
 
         <slide bg-img="promise-land.jpg"></slide>
+
+        <slide steps="1">
+            <h2>A promise represents the eventual result of an asynchronous operation.</h2>
+            <div step="1">
+                <div class="separator"></div>
+                <h2>In practice something that have a <code class="inline">.then</code> method</h2>
+            </div>
+        </slide>
+        
+        <slide>
+            <h2>A common example:</h2>
+            <code prism class="language-javascript">
+                Resource.query()
+                    .then(
+                        function(res){
+                            // successHandles
+                        },
+                        function(e){
+                            // errorHandler
+                        }
+                    );
+            </code>
+            <h3>From AngularJs Resources</h3>
+        </slide>
+
+        <slide steps="7">
+            <h2>Promise States</h2>
+            <div step="1" class="col third">
+                <h3><code class="inline">pending</code></h3>
+            </div>
+            <div step="2" class="col third">
+                <h3><code class="inline">fulfilled</code></h3>
+            </div>
+            <div step="3" class="col third">
+                <h3><code class="inline">rejected</code></h3>
+            </div>
+            <div step="4">
+                <h2>Promise Features</h2>
+            </div>
+            <div class="col half">
+                <div step="5">
+                    <h3>Once fullfilled/rejected state and value does NOT change</h3>
+                </div>
+            </div>
+            <div class="col half">
+                <div step="6">
+                    <h3><code class="inline">.then</code> MUST retutn a Promise</h3>
+                </div>
+                <div step="7">
+                    <h3><code class="inline">.then</code> are chainables</h3>
+                </div>
+            </div>
+        </slide>
+
+        <slide steps="5">
+            <h2>Promise Methods</h2>
+            <div step="1" class="col half">
+                <h3><code class="inline">.then(success, error)</code></h3>
+            </div>
+            <div step="2" class="col half">
+                <h3><code class="inline">.catch(error)</code></h3>
+            </div>
+            <div step="3">
+                <h3><code class="inline">[.finally(done)]</code></h3>
+            </div>
+            <div step="4" class="col half">
+                <h3><code class="inline">.all(promiseArray)</code></h3>
+            </div>
+            <div step="5" class="col half">
+                <h3><code class="inline">.race(promiseArray)</code></h3>
+            </div>
+            <note>finaly is provided from libraries</note>
+        </slide>
+        
+        <slide>
+            <h2>Promise declaration: ES6</h2>
+            <code prism class="language-javascript">
+                let promise = new Promise(resolve, reject){
+                    // do async stuff
+                    
+                    // if success
+                    resolve(value);
+
+                    // if error
+                    reject(e);
+                };
+            </code>
+            <code prism class="language-javascript">
+                // use the promise
+                promise.then(successHandler, errorHandler);
+            </code>
+            <note>
+                Error must be handled inside the promise
+                Babel supports promise
+            </note>
+        </slide>
+
+        <slide>
+            <h2>Promise declaration: Q - $q</h2>
+            <code prism class="language-javascript">
+                var Q = require('q');
+                var promise = function(){
+                    var deferred = Q.defer();
+                    FS.readFile("foo.txt", "utf-8", function (error, text) {
+                        if (error) {
+                            deferred.reject(new Error(error));
+                        } else {
+                            deferred.resolve(text);
+                        }
+                    });
+                    return deferred.promise;
+                };
+            </code>
+            <code prism class="language-javascript">
+                // use the promise
+                promise.then(successHandler, errorHandler);
+            </code>
+        </slide>
+
+        <slide>
+            <h2>Promise declaration: BlueBird</h2>
+            <code prism class="language-javascript">
+                var P = require('bluebird');
+                var promise = P.promisify(function(done){
+                    // do async stuff
+                    
+                    // if error
+                    done(e);
+                    
+                    // if success
+                    done(null, value);
+                });
+            </code>
+            <code prism class="language-javascript">
+                var promise = P.promisify(
+                    function(itemId, done){
+                        return Model.findById(itemId, done);
+                    }
+                );
+            </code>
+            <note>Rock with node!</note>
+        </slide>
+
+        <slide>
+            <h2>Suggested Readings:</h2>
+            <h3>https://promisesaplus.com</h3>
+            <h3>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</h3>
+            <h3>http://www.html5rocks.com/en/tutorials/es6/promises/</h3>
+        </slide>
         <!-- TODO -->
 <!--    
-        Named Functions
-        Callback Libraries
-
-        Promise Theory
-        Promise Example with Q and Bluebird
-        ES6 Promise
-        Promise Chains
+        Promise Chains (link a cb hell e named functions)
         Promise Error Handling
 
         Generators
