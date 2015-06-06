@@ -119,7 +119,7 @@
             </code>
        </slide>
 
-       <slide steps="1">
+        <slide steps="1">
            <h2>Pretty simple, but what's next?</h2>
            <div step="1">
                <code prism class="language-javascript">
@@ -136,7 +136,7 @@
                     })
                </code>
             </div>
-       </slide>
+        </slide>
 
         <slide bg-img="fire-orange-emergency-burning.jpg" credits="http://www.pexels.com/">
             <h1 class="abs-center">Welcome to Callback Hell!</h1>
@@ -379,15 +379,210 @@
         </slide>
 
         <slide>
+            <h2>Promise Chains</h2>
+            <code prism class="language-javascript">
+                let pr1 = function(){
+                    return new Promise(resolve, reject){...}
+                };
+
+                // let pr2, pr3, prN, ...
+
+                pr1()
+                .then(function(res){
+                    return pr2;
+                })
+                .then(function(res){
+                    return pr3;
+                })
+                .then(function(res){
+                    // do something with the result
+                })
+            </code>
+            <note>Remember CB Hell slide 9?</note>
+        </slide>
+
+        <slide>
+            <h2>A practical example</h2>
+            <code prism class="language-javascript">
+                // Post and Comments are ngResources, they return a promise
+
+                Post.get(postId)
+                .then((post) => {
+                    $scope.post = post;
+                    return Comments.query({postId: post._id});
+                })
+                .then((comments) => {
+                    $scope.post.comments = comments;
+                })
+                .catch(function(err){
+                    $scope.error = err.data.message;
+                })
+                .finally(() => {
+                    $scope.loader = false;
+                })
+            </code>
+        </slide>
+
+        <slide steps="3">
+            <h2>Promise advantages</h2>
+            <div step="1">
+                <h3>Function(s) are separated (dillo a parole tue)</h3>
+            </div>
+            <div step="2">
+                <h3>Following the business logic is easy</h3>
+            </div>
+            <div step="3">
+                <h3>Add/remove steps with no pain!</h3>
+            </div>
+        </slide>
+
+        <slide>
+            <h2>Handling Errors</h2>
+            <code prism class="language-javascript">
+                pr1()
+                .then(
+                    function(res){
+                        // do stuff
+                    },
+                    function(err){
+                        // handle error
+                    }
+                );
+            </code>
+        </slide>
+
+        <slide>
+            <h2 class="abs-center">
+                If a promise is reject the chain is skipped untill the first error handler
+            </h2>
+        </slide>
+
+        <slide>
+            <h2>Handling Errors</h2>
+            <code prism class="language-javascript">
+                pr1()
+                .then(
+                    function(res){
+                        // do stuff (if pr1 is resolved)
+                        return pr2();
+                    },
+                    function(err){
+                        // handle error from pr1
+                    }
+                )
+                .then(
+                    function(res){
+                        // do stuff (if pr2 is resolved) else this is never called
+                    },
+                    function(err){
+                        // handle error from pr2
+                    }
+                );
+            </code>
+        </slide>
+
+        <slide>
+            <h1 class="abs-center">Practical Advice</h1>
+        </slide>
+
+        <slide steps="2">
+            <h2>Use <code class="inline">.catch</code></h2>
+            <div class="col half">
+                <code prism class="language-javascript">
+    pr1()
+    .then(function(res){
+        // this is not executed 
+        // if pr1 is rejected
+        return pr2();
+    })
+    .catch(function(err){
+        //handle error
+    });
+                </code>
+                <div step="2">
+                    <h3><code class="inline">.catch</code> emproves readability</h3>
+                </div>
+            </div>
+            <div class="col half" step="1">
+                <code prism class="language-javascript">
+    pr1()
+    .catch(function(err){
+        //handle error
+    })
+    .then(function(res){
+        // this is executed both if 
+        // pr1 is resolved 
+        // or rejected
+        return pr2();
+    })
+    .catch(function(err){
+        //handle error
+    });
+                </code>
+            </div>
+        </slide>
+
+        <slide>
+            <h2>Passing multiple values</h2>
+        </slide>
+
+        <slide>
+            <h2>Break a promise chain</h2>
+        </slide>
+
+        <slide steps="2">
+            <h2>Mixing Sync and Async Methods</h2>
+            <div step="1">
+                <h1>Don't do that! It hurts!</h1>
+            </div>
+            <div step="2">
+                <h3>If the method have 1% possibilities to get Async, start with async!</h3>
+            </div>
+        </slide>
+
+        <slide>
             <h2>Suggested Readings:</h2>
             <h3>https://promisesaplus.com</h3>
             <h3>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</h3>
             <h3>http://www.html5rocks.com/en/tutorials/es6/promises/</h3>
         </slide>
-        <!-- TODO -->
-<!--    
-        Promise Chains (link a cb hell e named functions)
-        Promise Error Handling
+        <!-- TODO 
+
+        Callbacks are just blocks of code which can be run in response to events such as as timers going off or messages being received from the server. Any function can be a callback, and every callback is a function.
+
+        Promises are objects which store information about whether or not those events have happened yet, and if they have, what their outcome is.
+
+        http://jamesknelson.com/grokking-es6-promises-the-four-functions-you-need-to-avoid-callback-hell/
+        http://jamesknelson.com/grokking-es6-promises.png
+
+        #example: 
+
+        var pr = function(fn){
+          let p = new Promise(function(resolve, reject){
+            fn(function(err, data){
+              if(err){
+                return reject(err);
+              }
+              if(data){
+                console.log('resolve');
+                return resolve(data);
+              }
+            })
+          })
+          return p;
+        };
+
+        var success = function(done){
+          done(null, 'success');
+        };
+
+        pr(success)
+        .then(console.log);
+
+        Passing multiple values
+        .curry
+        break a promise chains
+        Map an array
 
         Generators
         Coroutine Bluebird
