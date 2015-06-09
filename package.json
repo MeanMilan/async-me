@@ -7,8 +7,10 @@
   },
   "scripts": {
     "start": "gulp serve"
-    },
-  "dependencies": {},
+  },
+  "dependencies": {
+    "bluebird": "^2.9.27"
+  },
   "devDependencies": {
     "browser-sync": "^1.5.1",
     "del": "^0.1.3",
