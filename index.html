@@ -578,7 +578,7 @@
             </code>
         </slide>
 
-        <slide>
+       <!--  <slide>
             <h2>Execute a promises in series</h2>
             <code prism class="language-javascript">
     function timeout(duration = 0) {
@@ -596,17 +596,73 @@
       });
     }, Promise.resolve());
             </code>
-        </slide>
-        
-        <slide>
-            <h2>Curry</h2>
+        </slide> -->
+
+        <slide steps="1">
+            <h2>Break a promise chain</h2>
+            <code prism class="language-javascript">
+    pr()
+    .then(...)
+    .then(function(res){
+        throw new Error(...):
+    })
+    .then(...)
+    .then(...)
+    .then(...)
+    .catch(...)
+            </code>
+            <div step="1">
+                <h3>You should handle the error!</h3>
+            </div>
         </slide>
 
-        <slide>
-            <h2>Break a promise chain</h2>
+        <slide steps="1">
+            <h2>Moving from callbacks to promises?</h2>
+            <div step="1">
+                <code prism class="language-javascript">
+    function(foo, bar, done){
+        if(typeof done !== 'function'){
+            // return a promise
+            var deferred = Q.defer();
+            done = function(err, res){
+                if(err){
+                    return deferred.reject(err);
+                }
+                return deferred.resolve(res);
+            };
+        }
+        
+        return done(err, res);
+    }
+                </code>
+            </div>
         </slide>
 
         <slide steps="2">
+            <h2>Could be simpler?</h2>
+            <div step="1">
+                <code prism class="language-javascript">
+    var cbFunc = function(foo, bar, done){
+        // do stuff
+        done(err, res);
+    };
+
+    cbFunc('a', 'b', callback);
+                </code>
+            </div>
+            <div step="2">
+                <code prism class="language-javascript">
+    var P = require('bluebird');
+
+    var promisified = P.promisify(cbFunc);
+
+    promisified('a','b')
+    .then(...)
+                </code>
+            </div>
+        </slide>
+
+      <!--   <slide steps="2">
             <h2>Mixing Sync and Async Methods</h2>
             <div step="1">
                 <h1>Don't do that! It hurts!</h1>
@@ -614,13 +670,155 @@
             <div step="2">
                 <h3>If the method have 1% possibilities to get Async, start with async!</h3>
             </div>
-        </slide>
+        </slide> -->
 
         <slide>
             <h2>Suggested Readings:</h2>
             <h3>https://promisesaplus.com</h3>
-            <h3>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</h3>
-            <h3>http://www.html5rocks.com/en/tutorials/es6/promises/</h3>
+            <h4>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</h4>
+            <h4>http://www.html5rocks.com/en/tutorials/es6/promises/</h4>
+        </slide>
+
+        <slide steps="1">
+            <h1 class="abs-center">The Future</h1>
+            <div step="1">
+                <h2>Generators</h2>
+            </div>
+        </slide>
+
+        <slide steps="1">
+            <h2>What are generators?</h2>
+            <div step="1">
+                <h1 class="abs-center">A brand new type of functions</h1>
+            </div>
+        </slide>
+
+        <slide steps="2">
+            <h2>What is different?</h2>
+            <div step="1">
+                <h1 class="abs-center">Run to completion</h1>
+            </div>
+        </slide>
+
+        <slide>
+            <h2>What does it means?</h2>
+            <code prism class="language-javascript">
+    setTimeout(function(){
+        console.log("Hello World");
+    },1);
+
+    function foo() {
+        // NOTE: don't ever do crazy long-running loops like this
+        for (var i=0; i<=1E10; i++) {
+            console.log(i);
+        }
+    }
+
+    foo();
+    // 0..1E10
+    // "Hello World"
+            </code>
+        </slide>
+
+        <slide steps="2">
+            <h2>Generators</h2>
+            <div step="1">
+                <h3>Run, Stop, Run!</h3>
+            </div>
+            <div step="2">
+                <code prism class="language-javascript">
+    function *foo() {
+        yield 1;
+        return 2;
+    }
+
+    var it = foo();
+
+    var message = it.next();
+
+    console.log(message); // { value:1, done:false }
+
+    console.log( it.next() ); // { value:2, done:true }
+                </code>
+            </div>
+        </slide>
+
+        <slide steps="1">
+            <h2>Can we <code class="inline">yield</code> a promise?</h2>
+            <div step="1">
+                <code prism="" class="language-javascript">
+    function request(url) {
+        makeAjaxCall( url, function(response){
+            it.next( response );
+        } );
+    }
+
+    function *main() {
+        var result1 = yield request( "http://some.url.1" );
+        var data = JSON.parse( result1 );
+        var result2 = yield request( "http://some.url.2?id=" + data.id );
+        var resp = JSON.parse( result2 );
+        console.log( "The value you asked for: " + resp.value );
+    }
+
+    var it = main();
+    it.next(); // get it all started
+                </code>
+                <span>http://davidwalsh.name/async-generators</span>
+            </div>
+        </slide>
+
+        <slide steps="1">
+            <h2>Bluebird <code class="inline">.coroutine</code> is here!</h2>
+            <div step="1">
+                <code prism="" class="language-javascript">
+    P.coroutine(function*(){
+
+        let pr1 = yield promise1();
+
+        let pr2 = yield promise2();
+
+        let pr3 = yield promise3();
+
+        // here is my then
+    })()
+    .catch(function(err){
+
+        // handle error
+    });
+                </code>
+            </div>
+            <note>
+                Ricordati di chiamare la funzione!!!
+            </note>
+        </slide>
+
+        <slide steps="2">
+            <h2>What's next?</h2>
+            <div step="1">
+                <h1>Async ... Await</h1>
+            </div>
+            <div step="2" style="margin-top: 100px;">
+                <code prism class="language-javascript">
+    (async function() {
+        let res = await AsyncFunction();
+        
+        // now res is available
+    }());
+                </code>
+            </div>
+        </slide>
+
+        <slide steps="2">
+            <div step="1">
+                <h1>Thanks!</h1>
+            </div>
+            <div step="2">
+                <h1 class="abs-center">Questions?</h1>
+            </div>
+            <div step="1">
+                <h4>@_teone</h4>
+            </div>
         </slide>
         <!-- TODO 
 
@@ -642,6 +840,8 @@
       <!-- =========== /SLIDE =========== -->
 
       </div>
+
+        <flip-clock></flip-clock>
 
       <div id="slide-count" ng-show="{{isSlideCountVisible}}">{{$storage.currentSlide}}/{{lastSlide}}</div>
 

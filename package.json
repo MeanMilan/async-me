@@ -9,7 +9,8 @@
     "start": "gulp serve"
   },
   "dependencies": {
-    "bluebird": "^2.9.27"
+    "bluebird": "^2.9.27",
+    "lodash": "^3.9.3"
   },
   "devDependencies": {
     "browser-sync": "^1.5.1",

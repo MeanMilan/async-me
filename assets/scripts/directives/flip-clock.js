@@ -22,10 +22,10 @@ applause.directive('flipClock', function(Appdata, $timeout, $window) {
           }
         };
         scope.isRunning = false;
-        startFrom = Appdata.startFrom;
+        startFrom = Appdata.data.startFrom;
         scope.time = '000000';
         scope.isPreviewMode = Appdata.data.isPreviewMode;
-        scope.isCounterEnabled = Appdata.counter;
+        scope.isCounterEnabled = Appdata.data.counter;
 
         scope.startCount = function() {
           if(!timer) {
