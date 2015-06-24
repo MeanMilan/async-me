@@ -1,6 +1,7 @@
 //variables
-$slideBg: #dedede;
-$mainColor: #bc1952;
+$slideBg: #00AAD2;
+//$mainColor: #0082AA;
+$mainColor: #fff;
 $progressBar: $mainColor;
 $progressBorder: #333;
 $mainBg: #333;
@@ -63,6 +64,10 @@ h3 {
   font-size: 2em;
   color: $mainTxtColor;
   text-align: center;
+}
+
+h3.small {
+  font-size: 1.5em;
 }
 
 .center {
@@ -178,4 +183,12 @@ blockquote {
     text-shadow: 0 0 2px rgb(255, 255, 255);
     box-shadow: inset 0 0 1px rgb(255, 255, 255), inset 0 0 .4em rgb(200, 200, 200), 0 .1em 0 rgb(130, 130, 130), 0 .11em 0 rgba(0, 0, 0, .3), 0 .1em .11em rgba(0, 0, 0, .8);
   }
+}
+
+.separator{
+  width: 100%;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+  margin: 50px auto;
 }
